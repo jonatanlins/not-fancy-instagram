@@ -16,7 +16,7 @@ class NewPost extends React.Component {
   state = {
     image: '',
     author: '',
-    place: '',
+    local: '',
     description: '',
   };
 
@@ -31,7 +31,7 @@ class NewPost extends React.Component {
   handleSubmit = async event => {
     event.preventDefault();
 
-    await api.post('posts', this.state);
+    await api.post('/posts', this.state);
 
     this.props.history.push('/');
   };
@@ -52,10 +52,10 @@ class NewPost extends React.Component {
 
           <input
             type="text"
-            name="place"
+            name="local"
             placeholder="Local do post"
             onChange={this.handleChange}
-            value={this.state.place}
+            value={this.state.local}
           />
 
           <input
