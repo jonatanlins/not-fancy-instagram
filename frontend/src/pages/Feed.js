@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Shell from '../components/Shell';
-import { api, baseURL } from '../services/api';
+import { api } from '../services/api';
 import moreImage from '../assets/icons/more.svg';
 import likeImage from '../assets/icons/like.svg';
 import commentImage from '../assets/icons/comment.svg';
@@ -15,7 +15,7 @@ class Feed extends React.Component {
 
   fetchData = async () => {
     const response = await api.get('posts');
-    this.setState({ feed: response.data });
+    this.setState({ feed: response.data.reverse() });
   };
 
   componentDidMount() {
@@ -29,7 +29,7 @@ class Feed extends React.Component {
       ),
     });
 
-    api.post(`posts/${id}/like`);
+    api.put(`posts/${id}/like`);
   };
 
   render() {
@@ -39,7 +39,7 @@ class Feed extends React.Component {
       <Shell>
         <StyledSection>
           {feed.map(post => (
-            <article key={post._id}>
+            <article key={post.id}>
               <header>
                 <div className="userInfo">
                   <span>{post.author}</span>
@@ -49,11 +49,11 @@ class Feed extends React.Component {
                 <img src={moreImage} alt="Mais" />
               </header>
 
-              <img src={`${baseURL}files/${post.image}`} alt="Imagem" />
+              <img src={post.image} alt="Imagem" />
 
               <footer>
                 <div className="actions">
-                  <button onClick={this.handleLike(post._id)}>
+                  <button onClick={this.handleLike(post.id)}>
                     <img src={likeImage} alt="Curtir" />
                   </button>
                   <button>
@@ -66,9 +66,7 @@ class Feed extends React.Component {
 
                 <strong>{post.likes} curtidas</strong>
 
-                <p>
-                  {post.description}
-                </p>
+                <p>{post.description}</p>
               </footer>
             </article>
           ))}
