@@ -4,13 +4,14 @@ import styled from 'styled-components';
 import api from '../services/api';
 import Shell from '../components/Shell';
 
-const toBase64 = file =>
-  new Promise((resolve, reject) => {
+const toBase64 = file => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = () => resolve(reader.result);
     reader.onerror = error => reject(error);
   });
+};
 
 class NewPost extends React.Component {
   state = {
@@ -24,8 +25,9 @@ class NewPost extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  handleImageChange = event => {
-    toBase64(event.target.files[0]).then(image => this.setState({ image }));
+  handleImageChange = async event => {
+    const image = await toBase64(event.target.files[0]);
+    this.setState({ image });
   };
 
   handleSubmit = async event => {

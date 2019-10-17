@@ -10,11 +10,20 @@ import sendImage from '../assets/icons/send.svg';
 
 class Feed extends React.Component {
   state = {
-    feed: [],
+    feed: [
+      {
+        author: 'Netinho',
+        description: 'Olokinho meu',
+        local: 'Tamandaré',
+        image:
+          'https://img.r7.com/images/dia-internacional-do-gato-instagram-08082019161531430',
+        likes: 6541654,
+      },
+    ],
   };
 
   fetchData = async () => {
-    const response = await api.get('posts');
+    const response = await api.get('/posts');
     this.setState({ feed: response.data.reverse() });
   };
 
@@ -25,11 +34,11 @@ class Feed extends React.Component {
   handleLike = id => () => {
     this.setState({
       feed: this.state.feed.map(post =>
-        post._id === id ? { ...post, likes: post.likes + 1 } : post
+        post.id === id ? { ...post, likes: post.likes + 1 } : post
       ),
     });
 
-    api.put(`posts/${id}/like`);
+    api.put(`/posts/${id}/like`);
   };
 
   render() {
@@ -43,7 +52,7 @@ class Feed extends React.Component {
               <header>
                 <div className="userInfo">
                   <span>{post.author}</span>
-                  <span className="place">{post.place}</span>
+                  <span className="place">{post.local}</span>
                 </div>
 
                 <img src={moreImage} alt="Mais" />
